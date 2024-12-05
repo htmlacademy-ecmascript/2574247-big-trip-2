@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Чайкин Борис](https://up.htmlacademy.ru/ecmascript-individual/2/user/2574247).
-* Наставник: `Сергей Андреев`.
+* Наставник: [Сергей Андреев](https://htmlacademy.ru/profile/id812127).
 
 ---
 

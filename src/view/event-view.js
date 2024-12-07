@@ -1,7 +1,8 @@
 import {createElement} from '../render.js';
-function createEventEditView(){
-  return `
-  <li class="trip-events__item">
+
+function createEventTemplate(){
+  return`
+ <li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
@@ -67,7 +68,7 @@ function createEventEditView(){
                     <label class="event__label  event__type-output" for="event-destination-1">
                       Flight
                     </label>
-                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1">
+                    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
                     <datalist id="destination-list-1">
                       <option value="Amsterdam"></option>
                       <option value="Geneva"></option>
@@ -92,7 +93,7 @@ function createEventEditView(){
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn" type="reset">Delete</button>
+                  <button class="event__reset-btn" type="reset">Cancel</button>
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
@@ -145,14 +146,30 @@ function createEventEditView(){
                       </div>
                     </div>
                   </section>
+
+                  <section class="event__section  event__section--destination">
+                    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                    <p class="event__destination-description">Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.</p>
+
+                    <div class="event__photos-container">
+                      <div class="event__photos-tape">
+                        <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">
+                        <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">
+                        <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">
+                        <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">
+                        <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">
+                      </div>
+                    </div>
+                  </section>
                 </section>
               </form>
-            </li>`;
+            </li>
+`;
 }
 
-export default class EventEditView{
+export default class EventView{
   getTemplate(){
-    return createEventEditView();
+    return createEventTemplate();
   }
 
   getElement(){
@@ -166,4 +183,3 @@ export default class EventEditView{
     this.element = null;
   }
 }
-

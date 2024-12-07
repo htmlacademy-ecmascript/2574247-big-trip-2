@@ -1,8 +1,8 @@
 import BoardPresenter from './presenter/board-presenter.js';
 
 const filtersContainer = document.querySelector('.trip-controls__filters');
-const sortsContainer = document.querySelector('.trip-events');
+const eventsContainer = document.querySelector('.trip-events');
 
-const boardPresenter = new BoardPresenter({filtersContainer, sortsContainer});
+const boardPresenter = new BoardPresenter({filtersContainer, eventsContainer});
 
 boardPresenter.init();

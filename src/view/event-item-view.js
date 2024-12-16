@@ -1,6 +1,6 @@
 import {createElement} from '../render.js';
 import { humanizePointDueDate, humanizePointDueTime } from '../utils';
-import {getDiferenceTime} from '../utils.js';
+import {getDifferenceTime} from '../utils.js';
 
 function createEventOffersTemplate(eventOffers) {
   return eventOffers.map((eventOffer) => (
@@ -18,9 +18,9 @@ function createEventItemTemplate(event, destinations, offers){
 
   const typeOffers = offers.find((offer) => offer.type === event.type).offers;
   const eventOffers = typeOffers.filter((typeOffer) => event.offers.includes(typeOffer.id));
-  const eventDestination = destinations.filter((destination) => destination.id === event.destination);
+  const eventDestination = destinations.find((destination) => destination.id === event.destination);
 
-  const diferenceTime = getDiferenceTime(dateFrom, dateTo);
+  const differenceTime = getDifferenceTime(dateFrom, dateTo);
 
   return`
     <li class="trip-events__item">
@@ -29,14 +29,14 @@ function createEventItemTemplate(event, destinations, offers){
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
       </div>
-      <h3 class="event__title">${type} ${eventDestination[0].name}</h3>
+      <h3 class="event__title">${type} ${eventDestination.name}</h3>
       <div class="event__schedule">
         <p class="event__time">
           <time class="event__start-time" datetime="2019-03-18T10:30">${humanizePointDueTime(dateFrom)}</time>
           &mdash;
           <time class="event__end-time" datetime="2019-03-18T11:00">${humanizePointDueTime(dateTo)}</time>
         </p>
-        <p class="event__duration"> ${diferenceTime}</p>
+        <p class="event__duration"> ${differenceTime}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

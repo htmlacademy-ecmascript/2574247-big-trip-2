@@ -28,11 +28,10 @@ export default class BoardPresenter{
     render(new FiltersView(), this.filtersContainer);
     render(new SortsView(), this.eventsContainer);
     render(this.eventListView, this.eventsContainer, RenderPosition.AFTEREND);
-    render(new EventEditView(events[0], destinations, offers), this.eventListView.getElement(), RenderPosition.AFTERBEGIN);
+    render(new EventEditView(events, destinations, offers), this.eventListView.getElement(), RenderPosition.AFTERBEGIN);
     //render(new EventView(), this.eventListView.getElement(), RenderPosition.AFTERBEGIN);
 
-    for (let i = 0; i < events.length ; i += 1) {
-      const event = events[i];
+    for(const event of events){
       render(new EventItemView(event, destinations, offers), this.eventListView.getElement());
     }
   }

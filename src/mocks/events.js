@@ -1,4 +1,4 @@
-export const events = [
+const events = [
   {
     id: '1',
     basePrice: 200,

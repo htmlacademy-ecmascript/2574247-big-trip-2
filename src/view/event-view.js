@@ -170,7 +170,6 @@ function createEventTemplate(){
 
 export default class EventView{
 
-
   getTemplate(){
     return createEventTemplate();
   }

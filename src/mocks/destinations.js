@@ -1,4 +1,4 @@
-export const destinations =
+const destinations =
   [
     {
       id: '1',

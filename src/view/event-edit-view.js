@@ -104,10 +104,10 @@ function createEventEditTemplate(events, destinations, offers){
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
         <button class="event__reset-btn" type="reset">${event.id ? 'Delete' : 'Cancel'}</button>
         ${event.id ? (
-          `<button class="event__rollup-btn" type="button">
+    `<button class="event__rollup-btn" type="button">
             <span class="visually-hidden">Open event</span>
             </button>`
-        ) : ''}
+  ) : ''}
       </header>
 
       <section class="event__details">

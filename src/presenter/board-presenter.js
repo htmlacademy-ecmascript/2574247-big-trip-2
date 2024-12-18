@@ -1,4 +1,6 @@
-import {render, RenderPosition} from '../render.js';
+
+import {render} from '../framework/render.js';
+import {RenderPosition} from '../render.js';
 import FiltersView from '../view/filters-view.js';
 import SortsView from '../view/sorts-view.js';
 import EventListView from '../view/events-list-view.js';
@@ -28,11 +30,11 @@ export default class BoardPresenter{
     render(new FiltersView(), this.filtersContainer);
     render(new SortsView(), this.eventsContainer);
     render(this.eventListView, this.eventsContainer, RenderPosition.AFTEREND);
-    render(new EventEditView(events, destinations, offers), this.eventListView.getElement(), RenderPosition.AFTERBEGIN);
+    render(new EventEditView(events, destinations, offers), this.eventListView.element, RenderPosition.AFTERBEGIN);
     //render(new EventView(), this.eventListView.getElement(), RenderPosition.AFTERBEGIN);
 
     for(const event of events){
-      render(new EventItemView(event, destinations, offers), this.eventListView.getElement());
+      render(new EventItemView(event, destinations, offers), this.eventListView.element);
     }
   }
 }

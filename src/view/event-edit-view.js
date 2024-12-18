@@ -1,4 +1,5 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
+//import {createElement} from '../render.js';
 import { humanizePointDueTime, capitalize } from '../utils';
 
 function createEventTypeTimplate(eventTypes, eventId, type){
@@ -130,27 +131,19 @@ function createEventEditTemplate(events, destinations, offers){
    </form>
   </li>`;
 }
-export default class EventEditView{
-
+export default class EventEditView extends AbstractView{
+  #events;
+  #destinations;
+  #offers;
   constructor (events, destinations, offers){
-    this.events = events;
-    this.destinations = destinations;
-    this.offers = offers;
+    super();
+    this.#events = events;
+    this.#destinations = destinations;
+    this.#offers = offers;
   }
 
-  getTemplate(){
-    return createEventEditTemplate(this.events, this.destinations, this.offers);
-  }
-
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement(){
-    this.element = null;
+  get template(){
+    return createEventEditTemplate(this.#events, this.#destinations, this.#offers);
   }
 }
 

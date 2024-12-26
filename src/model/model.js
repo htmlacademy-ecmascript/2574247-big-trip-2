@@ -1,25 +1,24 @@
 import {getEvents} from '../mocks/events.js';
 import {getDestinations} from '../mocks/destinations.js';
 import {getOffers} from '../mocks/offers.js';
+
 const events = getEvents();
 const destinations = getDestinations();
 const offers = getOffers();
 export default class Model{
-
   #events = events;
   #destinations = destinations;
   #offers = offers;
 
-  getEvents (){
+  get events (){
     return this. #events;
   }
 
-  getDestinations (){
+  get destinations (){
     return this.#destinations;
   }
 
-  getOffers(){
+  get offers(){
     return this.#offers;
   }
 }
-

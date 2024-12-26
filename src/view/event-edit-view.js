@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-//import {createElement} from '../render.js';
+
 import { humanizePointDueTime, capitalize } from '../utils';
 
 function createEventTypeTimplate(eventTypes, eventId, type){
@@ -44,7 +44,7 @@ function selectsCheckedTypeOffers(pointOffers, eventId, typeOffers){
 }
 
 function createEventEditTemplate(events, destinations, offers){
-  const event = events[0]; //уточнить
+  const event = events[0];
   const eventId = event.id;
 
   const pointDestination = destinations.find((destination) => destination.id === event.destination);
@@ -140,6 +140,10 @@ export default class EventEditView extends AbstractView{
     this.#events = events;
     this.#destinations = destinations;
     this.#offers = offers;
+  }
+
+  getEvent() {
+    return this.#events[0];
   }
 
   get template(){

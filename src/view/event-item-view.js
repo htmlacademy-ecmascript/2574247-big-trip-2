@@ -60,11 +60,13 @@ function createEventItemTemplate(event, destinations, offers){
 }
 
 export default class EventItemView extends AbstractView{
+  #handleClick = null;
   #event;
   #destinations;
   #offers;
-  constructor (event, destinations, offers){
+  constructor (event, destinations, offers, onClick){
     super();
+    this.#handleClick = onClick;
     this.#event = event;
     this.#destinations = destinations;
     this.#offers = offers;
@@ -72,6 +74,19 @@ export default class EventItemView extends AbstractView{
 
   get template(){
     return createEventItemTemplate(this.#event, this.#destinations, this.#offers);
+  }
+
+  setEventButtonClickHandler() {
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler.bind(this));
+    console.log('Event button click handler set');
+  }
+
+  #clickHandler(evt){
+    evt.preventDefault();
+    console.log('Event button clicked');
+    if(this.#handleClick){
+      this.#handleClick();
+    }
   }
 }
 

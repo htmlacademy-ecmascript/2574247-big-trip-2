@@ -78,12 +78,12 @@ export default class EventItemView extends AbstractView{
 
   setEventButtonClickHandler() {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler.bind(this));
-    console.log('Event button click handler set');
+    //console.log('Event button click handler set');
   }
 
   #clickHandler(evt){
     evt.preventDefault();
-    console.log('Event button clicked');
+    //console.log('Event button clicked');
     if(this.#handleClick){
       this.#handleClick();
     }

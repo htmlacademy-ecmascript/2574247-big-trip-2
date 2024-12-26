@@ -84,7 +84,7 @@ export default class BoardPresenter{
     evt.preventDefault();
 
     // Здесь можно добавить логику сохранения изменений
-    console.log('Форма сохранена для события:', event);
+    //console.log('Форма сохранена для события:', event);
 
     this.#closeEditForm(); // Закрытие формы после сохранения
   }

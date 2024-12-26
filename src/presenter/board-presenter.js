@@ -80,12 +80,11 @@ export default class BoardPresenter{
     }
   }
 
-  #handleSaveForm(evt, event) {
-    evt.preventDefault();
+  //#handleSaveForm(evt, event) {
+    //evt.preventDefault();
 
     // Здесь можно добавить логику сохранения изменений
     //console.log('Форма сохранена для события:', event);
 
-    this.#closeEditForm(); // Закрытие формы после сохранения
-  }
+    //this.#closeEditForm(); 
 }

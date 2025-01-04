@@ -2,12 +2,16 @@ import dayjs from 'dayjs';
 
 const DATE_FORMAT = 'MMM DD';
 const TIME_FORMAT = 'HH:mm';
+const MACHINE_FORMAT = 'YYYY-MM-DD';
+function machineDueFormat(dueDate) {
+  return dueDate ? dayjs(dueDate).format(MACHINE_FORMAT) : '';
+}
 
-function humanizePointDueTime(dueDate) {
+function humanizeDueTime(dueDate) {
   return dueDate ? dayjs(dueDate).format(TIME_FORMAT) : '';
 }
 
-function humanizePointDueDate(dueDate) {
+function humanizeDueDate(dueDate) {
   return dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
 }
 
@@ -34,4 +38,4 @@ function getDifferenceTime(dateFrom, dateTo){
 
 const capitalize = (word) => word[0].toUpperCase() + word.slice(1);
 
-export {humanizePointDueDate, humanizePointDueTime, getDifferenceTime, capitalize};
+export {humanizeDueDate, humanizeDueTime, getDifferenceTime, capitalize,machineDueFormat};

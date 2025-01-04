@@ -2,8 +2,8 @@ const events = [
   {
     id: '1',
     basePrice: 200,
-    dateFrom: '2024-11-10T22:55:56',
-    dateTo: '2024-11-11T11:22:13',
+    dateFrom: '2023-03-11T16:45:56.845Z',
+    dateTo: '2023-03-11T17:22:13.375Z',
     destination: '3',
     isFavorite: false,
     offers: ['1', '4'],
@@ -12,8 +12,8 @@ const events = [
   {
     id: '2',
     basePrice: 90,
-    dateFrom: '2024-11-12T22:55:56',
-    dateTo: '2024-11-13T11:22:13',
+    dateFrom: '2024-11-12T22:55:56.845Z',
+    dateTo: '2024-11-13T11:22:13.375Z',
     destination: '1',
     isFavorite: false,
     offers: ['2', '4'],

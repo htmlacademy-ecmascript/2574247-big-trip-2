@@ -1,8 +1,9 @@
 import FiltersView from '../view/filters-view.js';
 import SortView from '../view/sorts-view.js';
 import EventItemView from '../view/event-item-view.js';
-import EventEditVieW from '../view/event-edit-view.js';
+import EditingForm from '../view/event-edit-view.js';
 import EventListView from '../view/events-list-view.js';
+import NoEventItemView from '../view/no-events-item-view.js';
 import { RenderPosition } from '../render.js';
 import { render, replace } from '../framework/render.js';
 
@@ -11,6 +12,7 @@ export default class BoardPresenter {
   #eventsContainer = null;
   #model = null;
   #eventListView = null;
+  #onKeyDownHandler = null;
 
   constructor({ filtersContainer, eventsContainer, model }) {
     this.#filtersContainer = filtersContainer;
@@ -21,8 +23,12 @@ export default class BoardPresenter {
 
   init() {
     render(new FiltersView(), this.#filtersContainer, RenderPosition.BEFOREEND);
-    render(new SortView(), this.#eventsContainer);
-    this.#renderTripEvents(this.#model);
+    if(this.#model.events.length === 0){
+      render(new NoEventItemView, this.#eventsContainer);
+    }else{
+      render(new SortView(), this.#eventsContainer);
+      this.#renderTripEvents(this.#model);
+    }
   }
 
   #renderTripEvents({ events }) {
@@ -39,21 +45,11 @@ export default class BoardPresenter {
       offers,
       onClick: () => this.#switchToEditMode(tripEventView, event, events)
     });
-
-    const eventEditView = new EventEditVieW({
-      events,
-      event,
-      destinations,
-      offers,
-      onSubmit: () => this.#switchToViewMode(tripEventView, eventEditView),
-      onClick: () => this.#switchToViewMode(tripEventView, eventEditView)
-    });
-
     render(tripEventView, this.#eventListView.element);
   }
 
   #switchToEditMode(tripEventView, event, events) {
-    const eventEditView = new EventEditVieW({
+    const eventEditView = new EditingForm({
       events,
       event,
       destinations: this.#model.destinations,
@@ -62,13 +58,20 @@ export default class BoardPresenter {
       onClick: () => this.#switchToViewMode(tripEventView, eventEditView)
     });
 
-    replace(eventEditView, tripEventView);
-    document.addEventListener('keydown', (evt) => this.#onDocumentKeyDown(evt, tripEventView, eventEditView));
+    if (tripEventView.element.parentElement) {
+      replace(eventEditView, tripEventView);
+    }
+
+    this.#onKeyDownHandler = (evt) => this.#onDocumentKeyDown(evt, tripEventView, eventEditView);
+    document.addEventListener('keydown', this.#onKeyDownHandler);
   }
 
   #switchToViewMode(tripEventView, eventEditView) {
-    replace(tripEventView, eventEditView);
-    document.removeEventListener('keydown', this.#onDocumentKeyDown);
+    if (eventEditView.element.parentElement) {
+      replace(tripEventView, eventEditView);
+    }
+
+    document.removeEventListener('keydown', this.#onKeyDownHandler);
   }
 
   #onDocumentKeyDown(evt, tripEventView, eventEditView) {

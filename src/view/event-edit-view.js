@@ -114,7 +114,7 @@ ${getPictures(pictures)}
 </li>`;
 }
 
-export default class EventEditVieW extends AbstractView {
+export default class EditingForm extends AbstractView {
   #events = null;
   #event = null;
   #destinations = null;
@@ -148,3 +148,4 @@ export default class EventEditVieW extends AbstractView {
     return editEventFormTemplate(this.#event,this.#destinations, this.#offers, this.#events);
   }
 }
+

@@ -1,37 +1,25 @@
-import FiltersView from '../view/filters-view.js';
-import SortView from '../view/sorts-view.js';
 import EventItemView from '../view/event-item-view.js';
 import EditingForm from '../view/event-edit-view.js';
 import EventListView from '../view/events-list-view.js';
-import NoEventItemView from '../view/no-events-item-view.js';
-import { RenderPosition } from '../render.js';
 import { render, replace } from '../framework/render.js';
 
-export default class BoardPresenter {
-  #filtersContainer = null;
+export default class EventPresenter {
   #eventsContainer = null;
   #model = null;
   #eventListView = null;
   #onKeyDownHandler = null;
 
-  constructor({ filtersContainer, eventsContainer, model }) {
-    this.#filtersContainer = filtersContainer;
+  constructor({ eventsContainer, model }) {
     this.#eventsContainer = eventsContainer;
     this.#model = model;
     this.#eventListView = new EventListView();
   }
 
   init() {
-    render(new FiltersView(), this.#filtersContainer, RenderPosition.BEFOREEND);
-    if(this.#model.events.length === 0){
-      render(new NoEventItemView, this.#eventsContainer);
-    }else{
-      render(new SortView(), this.#eventsContainer);
-      this.#renderTripEvents(this.#model);
-    }
+    this.#renderTripEvents(this.#model.events);
   }
 
-  #renderTripEvents({ events }) {
+  #renderTripEvents(events) {
     render(this.#eventListView, this.#eventsContainer);
     events.forEach((event) => this.#renderTripEvent(event));
   }
@@ -81,4 +69,3 @@ export default class BoardPresenter {
     }
   }
 }
-

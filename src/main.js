@@ -1,11 +1,11 @@
-import BoardPresenter from './presenter/board-presenter';
-import PointsModel from './model/model';
+import GeneralPresenter from './presenter/general-presenter';
+import PointModel from './model/model';
 
 const filtersContainer = document.querySelector('.trip-controls__filters');
 const eventsContainer = document.querySelector('.trip-events');
-const model = new PointsModel();
+const model = new PointModel();
 model.init();
-const boardPresenter = new BoardPresenter({filtersContainer, eventsContainer, model});
+const generalPresenter = new GeneralPresenter({filtersContainer, eventsContainer, model});
 
-boardPresenter.init();
+generalPresenter.init();
 

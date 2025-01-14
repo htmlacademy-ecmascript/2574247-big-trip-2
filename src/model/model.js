@@ -2,7 +2,7 @@ import {getDestinations} from '../mocks/destinations.js';
 import {getEvents} from '../mocks/events.js';
 import {getOffers} from '../mocks/offers.js';
 
-export default class Model {
+export default class PointModel {
 
   #events = [];
   #destinations = [];

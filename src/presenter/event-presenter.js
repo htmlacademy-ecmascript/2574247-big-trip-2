@@ -8,11 +8,13 @@ export default class EventPresenter {
   #model = null;
   #eventListView = null;
   #onKeyDownHandler = null;
+  #onEventUpdate = null;
 
-  constructor({ eventsContainer, model }) {
+  constructor({ eventsContainer, model, onEventUpdate }) {
     this.#eventsContainer = eventsContainer;
     this.#model = model;
     this.#eventListView = new EventListView();
+    this.#onEventUpdate = onEventUpdate;
   }
 
   init() {
@@ -25,21 +27,22 @@ export default class EventPresenter {
   }
 
   #renderTripEvent(event) {
-    const { events, destinations, offers } = this.#model;
+    const { destinations, offers } = this.#model;
 
     const tripEventView = new EventItemView({
       event,
       destinations,
       offers,
-      onClick: () => this.#switchToEditMode(tripEventView, event, events)
+      onClick: () => this.#switchToEditMode(tripEventView, event),
+      onFavoriteClick: () => this.#handleFavoriteClick(event, tripEventView)
     });
     render(tripEventView, this.#eventListView.element);
   }
 
-  #switchToEditMode(tripEventView, event, events) {
+  #switchToEditMode(tripEventView, event) {
     const eventEditView = new EditingForm({
-      events,
       event,
+      events: this.#model.events,
       destinations: this.#model.destinations,
       offers: this.#model.offers,
       onSubmit: () => this.#switchToViewMode(tripEventView, eventEditView),
@@ -67,5 +70,25 @@ export default class EventPresenter {
       evt.preventDefault();
       this.#switchToViewMode(tripEventView, eventEditView);
     }
+  }
+
+  #handleFavoriteClick(event, tripEventView) {
+    const updatedEvent = { ...event, isFavorite: !event.isFavorite };
+    this.#onEventUpdate(updatedEvent);
+    this.#rerenderEvent(updatedEvent, tripEventView);
+  }
+
+  #rerenderEvent(updatedEvent, tripEventView) {
+
+    const { destinations, offers } = this.#model;
+    const newTripEventView = new EventItemView({
+      event: updatedEvent,
+      destinations,
+      offers,
+      onClick: () => this.#switchToEditMode(newTripEventView, updatedEvent),
+      onFavoriteClick: () => this.#handleFavoriteClick(updatedEvent, newTripEventView)
+    });
+
+    replace(newTripEventView, tripEventView);
   }
 }

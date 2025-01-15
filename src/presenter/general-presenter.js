@@ -15,7 +15,12 @@ export default class GeneralPresenter {
     this.#filtersContainer = filtersContainer;
     this.#eventsContainer = eventsContainer;
     this.#model = model;
-    this.#eventPresenter = new EventPresenter({ eventsContainer: this.#eventsContainer, model });
+
+    this.#eventPresenter = new EventPresenter({
+      eventsContainer: this.#eventsContainer,
+      model,
+      onEventUpdate: this.#handleEventUpdate
+    });
   }
 
   init() {
@@ -28,7 +33,10 @@ export default class GeneralPresenter {
     }
   }
 
-  #renderTripEvents() {
-    // Метод для рендеринга событий будет вызываться из event-presenter.js
-  }
+  #handleEventUpdate = (updatedEvent) => {
+    const eventIndex = this.#model.events.findIndex((event) => event.id === updatedEvent.id);
+    if (eventIndex !== -1) {
+      this.#model.events[eventIndex] = updatedEvent;
+    }
+  };
 }

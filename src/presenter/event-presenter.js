@@ -9,12 +9,16 @@ export default class EventPresenter {
   #eventListView = null;
   #onKeyDownHandler = null;
   #onEventUpdate = null;
+  #destinations = null;
+  #offers = null;
 
   constructor({ eventsContainer, model, onEventUpdate }) {
     this.#eventsContainer = eventsContainer;
     this.#model = model;
     this.#eventListView = new EventListView();
     this.#onEventUpdate = onEventUpdate;
+    this.#destinations = model.destinations;
+    this.#offers = model.offers;
   }
 
   init() {
@@ -27,12 +31,10 @@ export default class EventPresenter {
   }
 
   #renderTripEvent(event) {
-    const { destinations, offers } = this.#model;
-
     const tripEventView = new EventItemView({
       event,
-      destinations,
-      offers,
+      destinations: this.#destinations,
+      offers: this.#offers,
       onClick: () => this.#switchToEditMode(tripEventView, event),
       onFavoriteClick: () => this.#handleFavoriteClick(event, tripEventView)
     });
@@ -43,8 +45,8 @@ export default class EventPresenter {
     const eventEditView = new EditingForm({
       event,
       events: this.#model.events,
-      destinations: this.#model.destinations,
-      offers: this.#model.offers,
+      destinations: this.#destinations,
+      offers: this.#offers,
       onSubmit: () => this.#switchToViewMode(tripEventView, eventEditView),
       onClick: () => this.#switchToViewMode(tripEventView, eventEditView)
     });
@@ -79,12 +81,10 @@ export default class EventPresenter {
   }
 
   #rerenderEvent(updatedEvent, tripEventView) {
-
-    const { destinations, offers } = this.#model;
     const newTripEventView = new EventItemView({
       event: updatedEvent,
-      destinations,
-      offers,
+      destinations: this.#destinations,
+      offers: this.#offers,
       onClick: () => this.#switchToEditMode(newTripEventView, updatedEvent),
       onFavoriteClick: () => this.#handleFavoriteClick(updatedEvent, newTripEventView)
     });

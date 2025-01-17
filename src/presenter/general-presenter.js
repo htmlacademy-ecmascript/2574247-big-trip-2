@@ -27,16 +27,13 @@ export default class GeneralPresenter {
     render(new FiltersView(), this.#filtersContainer, RenderPosition.BEFOREEND);
     if (this.#model.events.length === 0) {
       render(new NoEventItemView(), this.#eventsContainer);
-    } else {
-      render(new SortView(), this.#eventsContainer);
-      this.#eventPresenter.init();
+      return;
     }
+    render(new SortView(), this.#eventsContainer);
+    this.#eventPresenter.init();
   }
 
   #handleEventUpdate = (updatedEvent) => {
-    const eventIndex = this.#model.events.findIndex((event) => event.id === updatedEvent.id);
-    if (eventIndex !== -1) {
-      this.#model.events[eventIndex] = updatedEvent;
-    }
+    this.#model.updateEvent(updatedEvent);
   };
 }

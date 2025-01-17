@@ -26,13 +26,8 @@ export default class PointModel {
   }
 
   updateEvent(updatedEvent) {
-    const index = this.#events.findIndex((event) => event.id === updatedEvent.id);
-    if (index !== -1) {
-      this.#events = [
-        ...this.#events.slice(0, index),
-        updatedEvent,
-        ...this.#events.slice(index + 1)
-      ];
-    }
+    this.#events = this.#events.map((event) =>
+      event.id === updatedEvent.id ? ({...updatedEvent}) : ({...event})
+    );
   }
 }

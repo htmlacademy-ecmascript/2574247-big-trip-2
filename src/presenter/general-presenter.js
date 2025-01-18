@@ -9,18 +9,12 @@ export default class GeneralPresenter {
   #filtersContainer = null;
   #eventsContainer = null;
   #model = null;
-  #eventPresenter = null;
+  #eventPresenters = [];
 
   constructor({ filtersContainer, eventsContainer, model }) {
     this.#filtersContainer = filtersContainer;
     this.#eventsContainer = eventsContainer;
     this.#model = model;
-
-    this.#eventPresenter = new EventPresenter({
-      eventsContainer: this.#eventsContainer,
-      model,
-      onEventUpdate: this.#handleEventUpdate
-    });
   }
 
   init() {
@@ -30,8 +24,25 @@ export default class GeneralPresenter {
       return;
     }
     render(new SortView(), this.#eventsContainer);
-    this.#eventPresenter.init();
+    this.#renderTripEvents();
   }
+
+  #renderTripEvents() {
+    this.#model.events.forEach((event) => {
+      const eventPresenter = new EventPresenter({
+        eventsContainer: this.#eventsContainer,
+        model: this.#model,
+        onEventUpdate: this.#handleEventUpdate,
+        onEdit: this.#handleEditEvent
+      });
+      eventPresenter.init(event);
+      this.#eventPresenters.push(eventPresenter);
+    });
+  }
+
+  #handleEditEvent = () => {
+    this.#eventPresenters.forEach((presenter) => presenter.resetView());
+  };
 
   #handleEventUpdate = (updatedEvent) => {
     this.#model.updateEvent(updatedEvent);

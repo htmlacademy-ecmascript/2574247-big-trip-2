@@ -9,86 +9,88 @@ export default class EventPresenter {
   #eventListView = null;
   #onKeyDownHandler = null;
   #onEventUpdate = null;
+  #onEdit = null;
   #destinations = null;
   #offers = null;
+  #tripEventView = null;
+  #eventEditView = null;
 
-  constructor({ eventsContainer, model, onEventUpdate }) {
+  constructor({ eventsContainer, model, onEventUpdate, onEdit }) {
     this.#eventsContainer = eventsContainer;
     this.#model = model;
     this.#eventListView = new EventListView();
     this.#onEventUpdate = onEventUpdate;
+    this.#onEdit = onEdit;
     this.#destinations = model.destinations;
     this.#offers = model.offers;
   }
 
-  init() {
-    this.#renderTripEvents(this.#model.events);
-  }
-
-  #renderTripEvents(events) {
-    render(this.#eventListView, this.#eventsContainer);
-    events.forEach((event) => this.#renderTripEvent(event));
-  }
-
-  #renderTripEvent(event) {
-    const tripEventView = new EventItemView({
+  init(event) {
+    this.#tripEventView = new EventItemView({
       event,
       destinations: this.#destinations,
       offers: this.#offers,
-      onClick: () => this.#switchToEditMode(tripEventView, event),
-      onFavoriteClick: () => this.#handleFavoriteClick(event, tripEventView)
+      onClick: () => this.#switchToEditMode(event),
+      onFavoriteClick: () => this.#handleFavoriteClick(event)
     });
-    render(tripEventView, this.#eventListView.element);
+    render(this.#tripEventView, this.#eventsContainer);
   }
 
-  #switchToEditMode(tripEventView, event) {
-    const eventEditView = new EditingForm({
+  resetView() {
+    if (this.#eventEditView) {
+      this.#switchToViewMode();
+    }
+  }
+
+  #switchToEditMode(event) {
+    this.#onEdit();
+
+    this.#eventEditView = new EditingForm({
       event,
       events: this.#model.events,
-      destinations: this.#destinations,
-      offers: this.#offers,
-      onSubmit: () => this.#switchToViewMode(tripEventView, eventEditView),
-      onClick: () => this.#switchToViewMode(tripEventView, eventEditView)
+      destinations: this.#model.destinations,
+      offers: this.#model.offers,
+      onSubmit: () => this.#switchToViewMode(),
+      onClick: () => this.#switchToViewMode()
     });
 
-    if (tripEventView.element.parentElement) {
-      replace(eventEditView, tripEventView);
-    }
+    replace(this.#eventEditView, this.#tripEventView);
 
-    this.#onKeyDownHandler = (evt) => this.#onDocumentKeyDown(evt, tripEventView, eventEditView);
+    this.#onKeyDownHandler = (evt) => this.#onDocumentKeyDown(evt);
     document.addEventListener('keydown', this.#onKeyDownHandler);
   }
 
-  #switchToViewMode(tripEventView, eventEditView) {
-    if (eventEditView.element.parentElement) {
-      replace(tripEventView, eventEditView);
+  #switchToViewMode() {
+    if (this.#eventEditView) {
+      replace(this.#tripEventView, this.#eventEditView);
+      this.#eventEditView = null;
     }
-
     document.removeEventListener('keydown', this.#onKeyDownHandler);
   }
 
-  #onDocumentKeyDown(evt, tripEventView, eventEditView) {
+  #onDocumentKeyDown(evt) {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      this.#switchToViewMode(tripEventView, eventEditView);
+      this.#switchToViewMode();
     }
   }
 
-  #handleFavoriteClick(event, tripEventView) {
+  #handleFavoriteClick(event) {
     const updatedEvent = { ...event, isFavorite: !event.isFavorite };
     this.#onEventUpdate(updatedEvent);
-    this.#rerenderEvent(updatedEvent, tripEventView);
+    this.#rerenderEvent(updatedEvent);
   }
 
-  #rerenderEvent(updatedEvent, tripEventView) {
+  #rerenderEvent(updatedEvent) {
     const newTripEventView = new EventItemView({
       event: updatedEvent,
       destinations: this.#destinations,
       offers: this.#offers,
-      onClick: () => this.#switchToEditMode(newTripEventView, updatedEvent),
-      onFavoriteClick: () => this.#handleFavoriteClick(updatedEvent, newTripEventView)
+      onClick: () => this.#switchToEditMode(updatedEvent),
+      onFavoriteClick: () => this.#handleFavoriteClick(updatedEvent)
     });
 
-    replace(newTripEventView, tripEventView);
+    replace(newTripEventView, this.#tripEventView);
+    this.#tripEventView = newTripEventView;
   }
 }

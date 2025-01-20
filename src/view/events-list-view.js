@@ -4,7 +4,7 @@ function createEventsListView(){
   return '<ul class="trip-events__list"></ul>';
 }
 
-export default class EventListView extends AbstractView{
+export default class EventsListView extends AbstractView{
   get template(){
     return createEventsListView();
   }

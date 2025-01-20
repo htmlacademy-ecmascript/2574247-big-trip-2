@@ -115,10 +115,10 @@ ${getPictures(pictures)}
 }
 
 export default class EditingForm extends AbstractView {
-  #events = null;
+  #events = [];
   #event = null;
-  #destinations = null;
-  #offers = null;
+  #destinations = [];
+  #offers = [];
   #onClick = null;
   #onSubmit = null;
 

@@ -58,8 +58,8 @@ const createWayPointTemplate = (event, destinations, offers) => {
 
 export default class EventItemView extends AbstractView {
   #event = null;
-  #destinations = null;
-  #offers = null;
+  #destinations = [];
+  #offers = [];
   #onClick = null;
   #onFavoriteClick = null;
 

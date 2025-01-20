@@ -6,26 +6,26 @@ import { render, replace } from '../framework/render.js';
 export default class EventPresenter {
   #eventsContainer = null;
   #model = null;
-  #eventListView = null;
+  #eventListView = new EventListView();
   #onKeyDownHandler = null;
   #onEventUpdate = null;
   #onEdit = null;
-  #destinations = null;
-  #offers = null;
+  #destinations = [];
+  #offers = [];
   #tripEventView = null;
   #eventEditView = null;
 
   constructor({ eventsContainer, model, onEventUpdate, onEdit }) {
     this.#eventsContainer = eventsContainer;
     this.#model = model;
-    this.#eventListView = new EventListView();
     this.#onEventUpdate = onEventUpdate;
     this.#onEdit = onEdit;
-    this.#destinations = model.destinations;
-    this.#offers = model.offers;
   }
 
   init(event) {
+    this.#destinations = this.#model.destinations;
+    this.#offers = this.#model.offers;
+
     this.#tripEventView = new EventItemView({
       event,
       destinations: this.#destinations,
@@ -48,8 +48,8 @@ export default class EventPresenter {
     this.#eventEditView = new EditingForm({
       event,
       events: this.#model.events,
-      destinations: this.#model.destinations,
-      offers: this.#model.offers,
+      destinations: this.#destinations,
+      offers: this.#offers,
       onSubmit: () => this.#switchToViewMode(),
       onClick: () => this.#switchToViewMode()
     });

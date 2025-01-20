@@ -1,9 +1,8 @@
-import {getDestinations} from '../mocks/destinations.js';
-import {getEvents} from '../mocks/events.js';
-import {getOffers} from '../mocks/offers.js';
+import { getDestinations } from '../mocks/destinations.js';
+import { getEvents } from '../mocks/events.js';
+import { getOffers } from '../mocks/offers.js';
 
-export default class Model {
-
+export default class PointModel {
   #events = [];
   #destinations = [];
   #offers = [];
@@ -24,5 +23,11 @@ export default class Model {
 
   get offers() {
     return this.#offers;
+  }
+
+  updateEvent(updatedEvent) {
+    this.#events = this.#events.map((event) =>
+      event.id === updatedEvent.id ? ({...updatedEvent}) : ({...event})
+    );
   }
 }

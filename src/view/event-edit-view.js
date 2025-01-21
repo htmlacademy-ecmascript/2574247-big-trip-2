@@ -41,7 +41,6 @@ function getPictures(pictures){
 `;
 }
 
-
 function editEventFormTemplate(event, destinations, offers, events){
   const eventTypes = events.map((evt) => evt.type);
   const eventId = event.id;

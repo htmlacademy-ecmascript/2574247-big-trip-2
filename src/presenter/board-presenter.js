@@ -11,7 +11,8 @@ export default class BoardPresenter {
   #eventsContainer = null;
   #eventsListView = new EventListView();
   #model = null;
-  #eventPresenters = [];
+  #eventPresenters = new Map();
+  #currentSortType = 'day';
 
   constructor({ filtersContainer, eventsContainer, model }) {
     this.#filtersContainer = filtersContainer;
@@ -27,7 +28,10 @@ export default class BoardPresenter {
       return;
     }
 
-    render(new SortView(), this.#eventsContainer);
+    const sortView = new SortView({
+      onSortTypeChange: this.#handleSortTypeChange,
+    });
+    render(sortView, this.#eventsContainer);
 
     render(this.#eventsListView, this.#eventsContainer);
 
@@ -35,17 +39,57 @@ export default class BoardPresenter {
   }
 
   #renderTripEvents() {
-    this.#model.events.forEach((event) => {
-      const eventPresenter = new EventPresenter({
-        eventsContainer: this.#eventsListView.element,
-        model: this.#model,
-        onEventUpdate: this.#handleEventUpdate,
-        onEdit: this.#handleEditEvent,
-      });
-      eventPresenter.init(event);
-      this.#eventPresenters.push(eventPresenter);
+    this.#clearTripEvents();
+
+    const sortedEvents = this.#getSortedEvents();
+    sortedEvents.forEach((event) => {
+      this.#renderEvent(event);
     });
   }
+
+  #renderEvent(event) {
+    const eventPresenter = new EventPresenter({
+      eventsContainer: this.#eventsListView.element,
+      model: this.#model,
+      onEventUpdate: this.#handleEventUpdate,
+      onEdit: this.#handleEditEvent,
+    });
+    eventPresenter.init(event);
+    this.#eventPresenters.set(event.id, eventPresenter);
+  }
+
+  #clearTripEvents() {
+    this.#eventPresenters.forEach((presenter) => presenter.resetView());
+    this.#eventPresenters.clear();
+    this.#eventsListView.element.innerHTML = '';
+  }
+
+  #getSortedEvents() {
+    const events = [...this.#model.events];
+
+    switch (this.#currentSortType) {
+      case 'time':
+        return events.sort(
+          (a, b) =>
+            (new Date(b.dateTo) - new Date(b.dateFrom)) -
+            (new Date(a.dateTo) - new Date(a.dateFrom))
+        );
+      case 'price':
+        return events.sort((a, b) => b.basePrice - a.basePrice);
+      case 'day':
+      default:
+        return events.sort((a, b) => new Date(a.dateFrom) - new Date(b.dateFrom));
+    }
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#currentSortType = sortType;
+    this.#renderTripEvents();
+  };
 
   #handleEditEvent = () => {
     this.#eventPresenters.forEach((presenter) => presenter.resetView());
@@ -53,5 +97,10 @@ export default class BoardPresenter {
 
   #handleEventUpdate = (updatedEvent) => {
     this.#model.updateEvent(updatedEvent);
+
+    if (this.#eventPresenters.has(updatedEvent.id)) {
+      const presenter = this.#eventPresenters.get(updatedEvent.id);
+      presenter.init(updatedEvent);
+    }
   };
 }

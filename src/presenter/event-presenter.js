@@ -1,12 +1,10 @@
 import EventItemView from '../view/event-item-view.js';
 import EditingForm from '../view/event-edit-view.js';
-import EventListView from '../view/events-list-view.js';
 import { render, replace } from '../framework/render.js';
 
 export default class EventPresenter {
   #eventsContainer = null;
   #model = null;
-  #eventListView = new EventListView();
   #onKeyDownHandler = null;
   #onEventUpdate = null;
   #onEdit = null;
@@ -26,14 +24,30 @@ export default class EventPresenter {
     this.#destinations = this.#model.destinations;
     this.#offers = this.#model.offers;
 
+    const prevTripEventView = this.#tripEventView;
+    const prevEventEditView = this.#eventEditView;
+
     this.#tripEventView = new EventItemView({
       event,
       destinations: this.#destinations,
       offers: this.#offers,
       onClick: () => this.#switchToEditMode(event),
-      onFavoriteClick: () => this.#handleFavoriteClick(event)
+      onFavoriteClick: () => this.#handleFavoriteClick(event),
     });
-    render(this.#tripEventView, this.#eventsContainer);
+
+    if (!prevTripEventView && !prevEventEditView) {
+      render(this.#tripEventView, this.#eventsContainer);
+      return;
+    }
+
+    if (prevTripEventView) {
+      replace(this.#tripEventView, prevTripEventView);
+    }
+
+    if (prevEventEditView) {
+      replace(this.#tripEventView, prevEventEditView);
+      this.#eventEditView = null;
+    }
   }
 
   resetView() {
@@ -51,7 +65,7 @@ export default class EventPresenter {
       destinations: this.#destinations,
       offers: this.#offers,
       onSubmit: () => this.#switchToViewMode(),
-      onClick: () => this.#switchToViewMode()
+      onClick: () => this.#switchToViewMode(),
     });
 
     replace(this.#eventEditView, this.#tripEventView);
@@ -78,19 +92,5 @@ export default class EventPresenter {
   #handleFavoriteClick(event) {
     const updatedEvent = { ...event, isFavorite: !event.isFavorite };
     this.#onEventUpdate(updatedEvent);
-    this.#rerenderEvent(updatedEvent);
-  }
-
-  #rerenderEvent(updatedEvent) {
-    const newTripEventView = new EventItemView({
-      event: updatedEvent,
-      destinations: this.#destinations,
-      offers: this.#offers,
-      onClick: () => this.#switchToEditMode(updatedEvent),
-      onFavoriteClick: () => this.#handleFavoriteClick(updatedEvent)
-    });
-
-    replace(newTripEventView, this.#tripEventView);
-    this.#tripEventView = newTripEventView;
   }
 }

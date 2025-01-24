@@ -5,6 +5,7 @@ import EventListView from '../view/events-list-view.js';
 import { RenderPosition } from '../render.js';
 import { render } from '../framework/render.js';
 import EventPresenter from './event-presenter.js';
+import {SortType} from '../const.js';
 
 export default class BoardPresenter {
   #filtersContainer = null;
@@ -61,22 +62,22 @@ export default class BoardPresenter {
   #clearTripEvents() {
     this.#eventPresenters.forEach((presenter) => presenter.resetView());
     this.#eventPresenters.clear();
-    this.#eventsListView.element.innerHTML = '';
+    this.#eventsListView.element.replaceChildren();
   }
 
   #getSortedEvents() {
     const events = [...this.#model.events];
 
     switch (this.#currentSortType) {
-      case 'time':
+      case SortType.TIME:
         return events.sort(
           (a, b) =>
             (new Date(b.dateTo) - new Date(b.dateFrom)) -
             (new Date(a.dateTo) - new Date(a.dateFrom))
         );
-      case 'price':
+      case SortType.PRICE:
         return events.sort((a, b) => b.basePrice - a.basePrice);
-      case 'day':
+      case SortType.DAY:
       default:
         return events.sort((a, b) => new Date(a.dateFrom) - new Date(b.dateFrom));
     }

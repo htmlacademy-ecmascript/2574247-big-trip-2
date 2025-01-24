@@ -41,7 +41,6 @@ function getPictures(pictures){
 `;
 }
 
-
 function editEventFormTemplate(event, destinations, offers, events){
   const eventTypes = events.map((evt) => evt.type);
   const eventId = event.id;
@@ -115,10 +114,10 @@ ${getPictures(pictures)}
 }
 
 export default class EditingForm extends AbstractView {
-  #events = null;
+  #events = [];
   #event = null;
-  #destinations = null;
-  #offers = null;
+  #destinations = [];
+  #offers = [];
   #onClick = null;
   #onSubmit = null;
 

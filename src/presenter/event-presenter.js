@@ -1,5 +1,5 @@
 import EventItemView from '../view/event-item-view.js';
-import EditingForm from '../view/event-edit-view.js';
+import EditingForm from '../view/editing-form.js';
 import { render, replace } from '../framework/render.js';
 
 export default class EventPresenter {

@@ -1,5 +1,5 @@
 import EventItemView from '../view/event-item-view.js';
-import EditingForm from '../view/editing-form.js';
+import EditingFormView from '../view/editing-form-view.js';
 import { render, replace } from '../framework/render.js';
 
 export default class EventPresenter {
@@ -59,7 +59,7 @@ export default class EventPresenter {
   #switchToEditMode(event) {
     this.#onEdit();
 
-    this.#eventEditView = new EditingForm({
+    this.#eventEditView = new EditingFormView({
       event,
       events: this.#model.events,
       destinations: this.#destinations,

@@ -12,11 +12,11 @@ function createEventTypeTemplate(eventTypes, eventId, type) {
   )).join('');
 }
 
-function destinationTemplate(destinations) {
+function createDestinationTemplate(destinations) {
   return destinations.map((destination) => `<option value="${destination.name}"></option>`).join('');
 }
 
-function selectsCheckedTypeOffers(typeOffers, eventOffers, eventId) {
+function createCheckedTypeOffersTimplate(typeOffers, eventOffers, eventId) {
   return typeOffers.map((typeOffer) => `
   <div class="event__available-offers">
     <div class="event__offer-selector">
@@ -31,7 +31,7 @@ function selectsCheckedTypeOffers(typeOffers, eventOffers, eventId) {
   </div>`).join('');
 }
 
-function getPictures(pictures) {
+function createPicturesTemplate(pictures) {
   if (pictures.length === 0) {
     return '';
   }
@@ -75,7 +75,7 @@ function editEventFormTemplate(state, destinations, offers, events) {
           <input class="event__input event__input--destination" id="event-destination-${eventId}"
             type="text" name="event-destination" value="${name}" list="destination-list-${eventId}">
           <datalist id="destination-list-${eventId}">
-            ${destinationTemplate(destinations)}
+            ${createDestinationTemplate(destinations)}
           </datalist>
         </div>
 
@@ -103,17 +103,17 @@ function editEventFormTemplate(state, destinations, offers, events) {
       </header>
 
       <section class="event__details">
-        ${typeOffers.length ? `
+        ${typeOffers.length > 0 ? `
           <section class="event__section event__section--offers">
             <h3 class="event__section-title event__section-title--offers">Offers</h3>
-            ${selectsCheckedTypeOffers(typeOffers, eventOffers, eventId)}
+            ${createCheckedTypeOffersTimplate(typeOffers, eventOffers, eventId)}
           </section>` : ''}
 
         ${currentDestination ? (`
           <section class="event__section event__section--destination">
             <h3 class="event__section-title event__section-title--destination">Destination</h3>
             <p class="event__destination-description">${description}</p>
-            ${getPictures(pictures)}
+            ${createPicturesTemplate(pictures)}
           </section>
         `) : ''}
       </section>
@@ -121,7 +121,7 @@ function editEventFormTemplate(state, destinations, offers, events) {
   </li>`;
 }
 
-export default class EditingForm extends AbstractStatefulView {
+export default class EditingFormView extends AbstractStatefulView {
   #events = [];
   #destinations = [];
   #offers = [];
@@ -130,7 +130,7 @@ export default class EditingForm extends AbstractStatefulView {
 
   constructor({ event, destinations, offers, onSubmit, onClick, events }) {
     super();
-    this._setState(EditingForm.parseEventToState(event));
+    this._setState(EditingFormView.parseEventToState(event));
     this.#events = events;
     this.#destinations = destinations;
     this.#offers = offers;
@@ -144,7 +144,7 @@ export default class EditingForm extends AbstractStatefulView {
   }
 
   reset(event) {
-    this.updateElement(EditingForm.parseEventToState(event));
+    this.updateElement(EditingFormView.parseEventToState(event));
   }
 
   _restoreHandlers() {
@@ -166,7 +166,7 @@ export default class EditingForm extends AbstractStatefulView {
     this.#onClick();
   };
 
-  #onEventTypeChange = (evt) => { // Обработчик изменения типа события
+  #onEventTypeChange = (evt) => {
     this.updateElement({
       type: evt.target.value,
       offers: []

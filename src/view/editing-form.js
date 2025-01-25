@@ -136,7 +136,6 @@ export default class EditingForm extends AbstractStatefulView {
     this.#offers = offers;
     this.#onSubmit = onSubmit;
     this.#onClick = onClick;
-
     this._restoreHandlers();
   }
 

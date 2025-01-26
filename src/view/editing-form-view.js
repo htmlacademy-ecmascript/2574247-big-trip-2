@@ -1,5 +1,7 @@
 import { humanizeDueTime, capitalize } from '../utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createEventTypeTemplate(eventTypes, eventId, type) {
   return eventTypes.map((eventType) => (
@@ -127,6 +129,8 @@ export default class EditingFormView extends AbstractStatefulView {
   #offers = [];
   #onSubmit = null;
   #onClick = null;
+  #flatpickrStart = null;
+  #flatpickrEnd = null;
 
   constructor({ event, destinations, offers, onSubmit, onClick, events }) {
     super();
@@ -154,6 +158,7 @@ export default class EditingFormView extends AbstractStatefulView {
       input.addEventListener('change', this.#onEventTypeChange)
     );
     this.element.querySelector('.event__input--destination')?.addEventListener('change', this.#onDestinationChange);
+    this.#setFlatpickr();
   }
 
   #onSubmitClick = (evt) => {
@@ -192,6 +197,44 @@ export default class EditingFormView extends AbstractStatefulView {
     return {
       ...state
     };
+  }
+
+  #setFlatpickr() {
+    const { dateFrom, dateTo } = this._state;
+
+    if (this.#flatpickrStart) {
+      this.#flatpickrStart.destroy();
+      this.#flatpickrStart = null;
+    }
+
+    if (this.#flatpickrEnd) {
+      this.#flatpickrEnd.destroy();
+      this.#flatpickrEnd = null;
+    }
+
+    this.#flatpickrStart = flatpickr(
+      this.element.querySelector(`#event-start-time-${this._state.id}`),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/y H:i',
+        defaultDate: dateFrom,
+        onChange: ([selectedDate]) => {
+          this.updateElement({ dateFrom: selectedDate });
+        }
+      }
+    );
+
+    this.#flatpickrEnd = flatpickr(
+      this.element.querySelector(`#event-end-time-${this._state.id}`),
+      {
+        enableTime: true,
+        dateFormat: 'd/m/y H:i',
+        defaultDate: dateTo,
+        onChange: ([selectedDate]) => {
+          this.updateElement({ dateTo: selectedDate });
+        }
+      }
+    );
   }
 }
 
